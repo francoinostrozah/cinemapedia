@@ -28,12 +28,18 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     super.initState();
 
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
+    ref.read(upcomingMoviesProvider.notifier).loadNextPage();
   }
 
   @override
   Widget build(BuildContext context) {
-    final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideshowMovies = ref.watch(moviesSlideshowProvider);
+    final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
+    final popularMovies = ref.watch(popularMoviesProvider);
+    final topRatedMovies = ref.watch(topRatedMoviesProvider);
+    final upcomingMovies = ref.watch(upcomingMoviesProvider);
 
     return CustomScrollView(slivers: [
       const SliverAppBar(
@@ -55,14 +61,27 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
               ),
               MovieHorizontalListview(
-                movies: nowPlayingMovies,
-                title: 'En Cines',
-                subTitle: 'Lunes 20',
+                movies: upcomingMovies,
+                title: 'Próximamente',
+                subTitle: 'En este mes',
                 loadNextPage: () =>
-                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
+                    ref.read(upcomingMoviesProvider.notifier).loadNextPage(),
+              ),
+              MovieHorizontalListview(
+                movies: popularMovies,
+                title: 'Populares',
+                loadNextPage: () =>
+                    ref.read(popularMoviesProvider.notifier).loadNextPage(),
+              ),
+              MovieHorizontalListview(
+                movies: topRatedMovies,
+                title: 'Mejor calificadas',
+                subTitle: 'Desde siempre',
+                loadNextPage: () =>
+                    ref.read(topRatedMoviesProvider.notifier).loadNextPage(),
               ),
               const SizedBox(
-                height: 1,
+                height: 10,
               )
             ],
           );
