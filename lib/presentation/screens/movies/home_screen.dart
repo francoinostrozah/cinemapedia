@@ -35,58 +35,66 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final initialLoading = ref.watch(initialLoadingProvider);
+
+    if (initialLoading) return const FullScreenLoader();
+
     final slideshowMovies = ref.watch(moviesSlideshowProvider);
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final popularMovies = ref.watch(popularMoviesProvider);
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
     final upcomingMovies = ref.watch(upcomingMoviesProvider);
 
-    return CustomScrollView(slivers: [
-      const SliverAppBar(
-        floating: true,
-        flexibleSpace: FlexibleSpaceBar(
-          title: CustomAppBar(),
+    return Visibility(
+      visible: !initialLoading,
+      child: CustomScrollView(slivers: [
+        const SliverAppBar(
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(
+            title: CustomAppBar(),
+          ),
         ),
-      ),
-      SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-          return Column(
-            children: [
-              MoviesSlideshow(movies: slideshowMovies),
-              MovieHorizontalListview(
-                movies: nowPlayingMovies,
-                title: 'En Cines',
-                subTitle: 'Lunes 20',
-                loadNextPage: () =>
-                    ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
-              ),
-              MovieHorizontalListview(
-                movies: upcomingMovies,
-                title: 'Próximamente',
-                subTitle: 'En este mes',
-                loadNextPage: () =>
-                    ref.read(upcomingMoviesProvider.notifier).loadNextPage(),
-              ),
-              MovieHorizontalListview(
-                movies: popularMovies,
-                title: 'Populares',
-                loadNextPage: () =>
-                    ref.read(popularMoviesProvider.notifier).loadNextPage(),
-              ),
-              MovieHorizontalListview(
-                movies: topRatedMovies,
-                title: 'Mejor calificadas',
-                subTitle: 'Desde siempre',
-                loadNextPage: () =>
-                    ref.read(topRatedMoviesProvider.notifier).loadNextPage(),
-              ),
-              const SizedBox(
-                height: 10,
-              )
-            ],
-          );
-        }, childCount: 1),
-      )
-    ]);
+        SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return Column(
+              children: [
+                MoviesSlideshow(movies: slideshowMovies),
+                MovieHorizontalListview(
+                  movies: nowPlayingMovies,
+                  title: 'En Cines',
+                  subTitle: 'Lunes 20',
+                  loadNextPage: () => ref
+                      .read(nowPlayingMoviesProvider.notifier)
+                      .loadNextPage(),
+                ),
+                MovieHorizontalListview(
+                  movies: upcomingMovies,
+                  title: 'Próximamente',
+                  subTitle: 'En este mes',
+                  loadNextPage: () =>
+                      ref.read(upcomingMoviesProvider.notifier).loadNextPage(),
+                ),
+                MovieHorizontalListview(
+                  movies: popularMovies,
+                  title: 'Populares',
+                  loadNextPage: () =>
+                      ref.read(popularMoviesProvider.notifier).loadNextPage(),
+                ),
+                MovieHorizontalListview(
+                  movies: topRatedMovies,
+                  title: 'Mejor calificadas',
+                  subTitle: 'Desde siempre',
+                  loadNextPage: () =>
+                      ref.read(topRatedMoviesProvider.notifier).loadNextPage(),
+                ),
+                const SizedBox(
+                  height: 10,
+                )
+              ],
+            );
+          }, childCount: 1),
+        )
+      ]),
+    );
   }
 }
