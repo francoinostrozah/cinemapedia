@@ -104,7 +104,7 @@ class _Slide extends StatelessWidget {
                 }
 
                 return GestureDetector(
-                  onTap: () => context.push('/movie/${movie.id}'),
+                  onTap: () => context.push('/home/0/movie/${movie.id}'),
                   child: FadeIn(child: child),
                 );
               },
@@ -135,13 +135,13 @@ class _Slide extends StatelessWidget {
                 width: 3,
               ),
               Text(
-                movie.voteAverage.toStringAsFixed(1),
+                HumanFormat.number(movie.voteAverage, 1),
                 style: textStyles.bodyMedium
                     ?.copyWith(color: Colors.yellow.shade800),
               ),
               const Spacer(),
               Text(
-                HumanFormat.number(movie.popularity),
+                HumanFormat.number(movie.popularity, 2),
                 style: textStyles.bodySmall,
               ),
             ],
