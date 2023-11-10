@@ -26,7 +26,7 @@ class IsarDatasource extends LocalStorageDatasource {
     final isar = await db;
 
     final Movie? isFavoriteMovie =
-        await isar.movies.filter().isarIdEqualTo(movieId).findFirst();
+        await isar.movies.filter().idEqualTo(movieId).findFirst();
 
     return isFavoriteMovie != null;
   }
